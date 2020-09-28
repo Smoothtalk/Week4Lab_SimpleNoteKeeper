@@ -5,11 +5,7 @@
  */
 package servlets;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Scanner;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -48,16 +44,17 @@ public class NoteServlet extends HttpServlet {
         while(textFile.hasNextLine()){
             contents += textFile.nextLine();
         }
-        
-        Note note = new Note(title, contents);
-        
-        request.setAttribute("note", note);
-        
+      
         textFile.close();
         
         if(edit != null){
+            Note note = new Note(title, contents);
+            request.setAttribute("note", note);
             getServletContext().getRequestDispatcher("/WEB-INF/editnote.jsp").forward(request, response);
         } else {
+            contents = contents.replaceAll("\n", "<br>");
+            Note note = new Note(title, contents);
+            request.setAttribute("note", note);
             getServletContext().getRequestDispatcher("/WEB-INF/viewnote.jsp").forward(request, response);
         }
     }
@@ -86,6 +83,7 @@ public class NoteServlet extends HttpServlet {
             textFile.println(line);
         }
         
+        contents = contents.replaceAll("\n", "<br>");
         Note note = new Note(title, contents);
         
         request.setAttribute("note", note);
