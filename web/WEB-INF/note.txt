@@ -1,4 +1,2 @@
-This is a title
-These are contents
-Contents 2
-Contents 3
+Title
+Content
