@@ -5,6 +5,8 @@
  */
 package servlets;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,6 +30,21 @@ public class NoteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        String contents = "";
+        String tempReader = "";
+        String path = getServletContext().getRealPath("/WEB-INF/note.txt");
+        
+        BufferedReader br = new BufferedReader(new FileReader(path));
+        request.setAttribute("title", br.readLine());
+        tempReader = br.readLine();
+       
+        while(tempReader != null) {
+            contents += tempReader;
+            tempReader = br.readLine();
+        }
+        
+        request.setAttribute("contents", contents);
         
         getServletContext().getRequestDispatcher("/WEB-INF/viewnote.jsp").forward(request, response);
     }
